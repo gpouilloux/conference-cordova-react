@@ -36,7 +36,7 @@ const Header = React.createClass({
             <MenuItem onTouchTap={this._closeMenu}>Sessions</MenuItem>
           </Link>
           <Link to="/speakers">
-            <MenuItem onTouchTap={this._closeMenu}>Présentateurs</MenuItem>
+            <MenuItem onTouchTap={this._closeMenu}>Speakers</MenuItem>
           </Link>
         </Drawer>
       </div>
