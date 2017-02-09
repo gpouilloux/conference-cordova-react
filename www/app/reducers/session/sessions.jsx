@@ -1,8 +1,8 @@
-import conferenceData from '../../data/devfest-2015.json'
+import conferenceData from '../../../data/devfest-2015.json'
 
 import {
   FETCH_SESSIONS
-} from '../actions/sessions.jsx'
+} from '../../actions/session/sessions.jsx'
 
 function fetchSessions() {
   return conferenceData.sessions

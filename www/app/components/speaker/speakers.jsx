@@ -3,7 +3,7 @@ import React from 'react'
 import {List, ListItem, makeSelectable} from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
 
-import Header from './header.jsx'
+import Header from '../header.jsx'
 
 let SelectableList = makeSelectable(List)
 

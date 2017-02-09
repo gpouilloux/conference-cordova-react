@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import Sessions from '../components/sessions.jsx'
-import * as SessionsActions from '../actions/sessions.jsx'
+import Sessions from '../../components/session/sessions.jsx'
+import * as SessionsActions from '../../actions/session/sessions.jsx'
 
 const mapStateToProps = (state, ownProps) => {
   return {

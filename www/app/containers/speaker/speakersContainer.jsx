@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import Speakers from '../components/speakers.jsx'
-import * as SpeakersActions from '../actions/speakers.jsx'
+import Speakers from '../../components/speaker/speakers.jsx'
+import * as SpeakersActions from '../../actions/speaker/speakers.jsx'
 
 const mapStateToProps = (state, ownProps) => {
   return {

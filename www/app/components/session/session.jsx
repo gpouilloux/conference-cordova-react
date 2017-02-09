@@ -1,10 +1,10 @@
 import React from 'react'
+import renderHTML from 'react-render-html'
 
-import {Card, CardTitle, CardText} from 'material-ui/Card'
-import {List, ListItem} from 'material-ui/List'
-import Avatar from 'material-ui/Avatar'
+import { Card, CardTitle, CardText } from 'material-ui/Card'
 
-import Header from './header.jsx'
+import Header from '../header.jsx'
+import SpeakersListWithPictureContainer from '../../containers/speaker/speakersListWithPictureContainer.jsx'
 
 /**
  * Component to view a session
@@ -24,27 +24,22 @@ const Session = React.createClass({
   },
 
   render() {
-    // wait that the session is fetched before rendering
-    console.log(this.props.session)
-    const speakers = this.props.session.speakersPlain.map(speaker => {
-      <ListItem
-        primaryText={`${speaker.firstname} ${speaker.lastname}`}
-        leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
-      />
-    })
 
     // TODO: improvement: youtube thumbnail and click to open youtube
     return (
       <div>
         <Header pageTitle="Session" />
         <Card>
-          <CardTitle title={this.props.session.title} subtitle="Card subtitle" />
+          <CardTitle title={this.props.session.title}/>
           <CardText>
-            {this.props.session.desc}
+            {renderHTML(`<div>${this.props.session.desc}</div>`)}
           </CardText>
-          <List>
-            {speakers}
-          </List>
+        </Card>
+        <Card>
+          {this.props.session.speakers ?
+            <SpeakersListWithPictureContainer speakerIds={this.props.session.speakers} />
+             : undefined
+          }
         </Card>
       </div>
     )

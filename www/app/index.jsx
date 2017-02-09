@@ -13,9 +13,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import configureStore from './store/configureStore.jsx'
 import HomeContainer from './containers/homeContainer.jsx'
-import SessionsContainer from './containers/sessionsContainer.jsx'
-import SessionContainer from './containers/sessionContainer.jsx'
-import SpeakersContainer from './containers/speakersContainer.jsx'
+import SessionsContainer from './containers/session/sessionsContainer.jsx'
+import SessionContainer from './containers/session/sessionContainer.jsx'
+import SpeakersContainer from './containers/speaker/speakersContainer.jsx'
 import AboutPhoneContainer from './containers/aboutPhoneContainer.jsx'
 
 const App = React.createClass({

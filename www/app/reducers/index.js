@@ -1,15 +1,17 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 
-import sessions from './sessions.jsx'
-import session from './session.jsx'
-import speakers from './speakers.jsx'
+import sessions from './session/sessions.jsx'
+import session from './session/session.jsx'
+import speakers from './speaker/speakers.jsx'
+import speaker from './speaker/speaker.jsx'
 
 const rootReducer = combineReducers({
   routing: routerReducer,
   sessions,
   session,
-  speakers
+  speakers,
+  speaker
 })
 
 export default rootReducer
