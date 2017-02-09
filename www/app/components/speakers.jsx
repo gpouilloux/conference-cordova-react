@@ -1,6 +1,11 @@
 import React from 'react'
 
+import {List, ListItem, makeSelectable} from 'material-ui/List'
+import Avatar from 'material-ui/Avatar'
+
 import Header from './header.jsx'
+
+let SelectableList = makeSelectable(List)
 
 /**
  * Component to list the speakers in a conference
@@ -9,13 +14,37 @@ import Header from './header.jsx'
 const Speakers = React.createClass({
 
   propTypes: {
+    speakers: React.PropTypes.array.isRequired,
+    fetchSpeakers: React.PropTypes.func.isRequired
+  },
+
+  componentDidMount() {
+    this.props.fetchSpeakers()
   },
 
   render() {
+    const rightArrow = <i className="fa fa-angle-right" aria-hidden="true" />
+
+    const speakersComponent = this.props.speakers.map(speaker => {
+      return (
+        <ListItem
+          key={speaker.id}
+          value={speaker.id}
+          primaryText={`${speaker.firstname} ${speaker.lastname}`}
+          leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
+          rightIcon={rightArrow}
+        />
+      )
+    })
+
+
     return (
       <div>
         <Header pageTitle="Speakers" />
-        <p>Speakers</p>
+        <SelectableList>
+          {speakersComponent}
+        </SelectableList>
+
       </div>
     )
   }

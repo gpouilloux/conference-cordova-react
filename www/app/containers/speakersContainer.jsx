@@ -1,13 +1,16 @@
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import Speakers from '../components/speakers.jsx'
+import * as SpeakersActions from '../actions/speakers.jsx'
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    speakers: state.speakers,
   }
 }
 
-const mapDispatchToProps = null
+const mapDispatchToProps = (dispatch) => bindActionCreators(SpeakersActions, dispatch)
 
 const SpeakersContainer = connect(
   mapStateToProps,

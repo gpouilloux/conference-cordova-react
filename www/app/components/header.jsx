@@ -38,6 +38,9 @@ const Header = React.createClass({
           <Link to="/speakers">
             <MenuItem onTouchTap={this._closeMenu}>Speakers</MenuItem>
           </Link>
+          <Link to="/aboutPhone">
+            <MenuItem onTouchTap={this._closeMenu}>About the phone</MenuItem>
+          </Link>
         </Drawer>
       </div>
     )
