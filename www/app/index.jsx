@@ -9,9 +9,10 @@ import {
 } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import configureStore from './store/configureStore.jsx'
+import AppContainer from './containers/homeContainer.jsx'
 import HomeContainer from './containers/homeContainer.jsx'
 import SessionsContainer from './containers/sessionsContainer.jsx'
 import SpeakersContainer from './containers/speakersContainer.jsx'
@@ -27,7 +28,7 @@ const App = React.createClass({
       <MuiThemeProvider>
         <Provider store={store}>
           <Router history={history}>
-            <Route path="/" component={HomeContainer}>
+            <Route path="/">
               <IndexRoute component={HomeContainer} />
               <Route path="sessions" component={SessionsContainer} />
               <Route path="speakers" component={SpeakersContainer} />
@@ -41,6 +42,6 @@ const App = React.createClass({
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
+injectTapEventPlugin()
 
 render(<App/>, document.getElementById('app'))
