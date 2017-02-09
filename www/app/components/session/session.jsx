@@ -28,7 +28,7 @@ const Session = React.createClass({
     // TODO: improvement: youtube thumbnail and click to open youtube
     return (
       <div>
-        <Header pageTitle="Session" />
+        <Header pageTitle='Session' hasReturnButton={true} />
         <Card>
           <CardTitle title={this.props.session.title}/>
           <CardText>
