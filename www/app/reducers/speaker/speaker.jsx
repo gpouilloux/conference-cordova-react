@@ -7,6 +7,7 @@ import {
 
 function fetchSpeaker(state, id) {
   const speaker = _.find(conferenceData.speakers, speaker => speaker.id === id)
+  speaker.sessions = _.filter(conferenceData.sessions, session => _.includes(session.speakers, id))
   return Object.assign({}, state, speaker)
 }
 

@@ -16,6 +16,7 @@ import HomeContainer from './containers/homeContainer.jsx'
 import SessionsContainer from './containers/session/sessionsContainer.jsx'
 import SessionContainer from './containers/session/sessionContainer.jsx'
 import SpeakersContainer from './containers/speaker/speakersContainer.jsx'
+import SpeakerContainer from './containers/speaker/speakerContainer.jsx'
 import AboutPhoneContainer from './containers/aboutPhoneContainer.jsx'
 
 const App = React.createClass({
@@ -34,6 +35,7 @@ const App = React.createClass({
               <Route path="sessions" component={SessionsContainer} />
               <Route path="sessions/:id" component={SessionContainer} />
               <Route path="speakers" component={SpeakersContainer} />
+              <Route path="speakers/:id" component={SpeakerContainer} />
               <Route path="aboutPhone" component={AboutPhoneContainer} />
             </Route>
           </Router>
