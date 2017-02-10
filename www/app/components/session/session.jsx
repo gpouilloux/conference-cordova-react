@@ -2,9 +2,10 @@ import React from 'react'
 import renderHTML from 'react-render-html'
 
 import { Card, CardTitle, CardText } from 'material-ui/Card'
+import { List, ListItem } from 'material-ui/List'
+import Avatar from 'material-ui/Avatar'
 
 import Header from '../header.jsx'
-import SpeakersListWithPictureContainer from '../../containers/speaker/speakersListWithPictureContainer.jsx'
 
 /**
  * Component to view a session
@@ -25,6 +26,15 @@ const Session = React.createClass({
 
   render() {
 
+    const speakersWithPicture = this.props.session.speakersPlain ? this.props.session.speakersPlain.map(speaker => {
+      return (
+        <ListItem key={speaker.id}
+          primaryText={`${speaker.firstname} ${speaker.lastname}`}
+          leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
+        />
+      )
+    }) : undefined
+
     // TODO: improvement: youtube thumbnail and click to open youtube
     return (
       <div>
@@ -36,10 +46,9 @@ const Session = React.createClass({
           </CardText>
         </Card>
         <Card>
-          {this.props.session.speakers ?
-            <SpeakersListWithPictureContainer speakerIds={this.props.session.speakers} />
-             : undefined
-          }
+          <List>
+            {speakersWithPicture}
+          </List>
         </Card>
       </div>
     )
