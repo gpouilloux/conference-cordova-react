@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router'
 import { hashHistory } from 'react-router'
 
+import LinkWithoutUnderline from './custom/linkWithoutUnderline.jsx'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
@@ -33,18 +33,18 @@ const Header = React.createClass({
         iconClassNameRight="muidocs-icon-navigation-expand-more"
         onLeftIconButtonTouchTap={this._toggleMenu}/>
       <Drawer open={this.state.isMenuOpen} onRequestChange={this._handleDrawerRequestChange}>
-        <Link to="/">
+        <LinkWithoutUnderline to="/">
           <MenuItem onTouchTap={this._closeMenu}>Conférence</MenuItem>
-        </Link>
-        <Link to="/sessions">
+        </LinkWithoutUnderline>
+        <LinkWithoutUnderline to="/sessions">
           <MenuItem onTouchTap={this._closeMenu}>Sessions</MenuItem>
-        </Link>
-        <Link to="/speakers">
+        </LinkWithoutUnderline>
+        <LinkWithoutUnderline to="/speakers">
           <MenuItem onTouchTap={this._closeMenu}>Speakers</MenuItem>
-        </Link>
-        <Link to="/aboutPhone">
+        </LinkWithoutUnderline>
+        <LinkWithoutUnderline to="/aboutPhone">
           <MenuItem onTouchTap={this._closeMenu}>About the phone</MenuItem>
-        </Link>
+        </LinkWithoutUnderline>
       </Drawer>
     </div>
 

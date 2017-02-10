@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router'
+// import { Link } from 'react-router'
 
 import {List, ListItem, makeSelectable} from 'material-ui/List'
 
+import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
 
 let SelectableList = makeSelectable(List)
@@ -27,13 +28,13 @@ const Sessions = React.createClass({
 
     const sessionsComponent = this.props.sessions.map(session => {
       return (
-        <Link key={session.id} to={`/sessions/${session.id}`}>
+        <LinkWithoutUnderline key={session.id} to={`/sessions/${session.id}`}>
           <ListItem
             value={session.id}
             primaryText={session.title}
             rightIcon={rightArrow}
           />
-        </Link>
+        </LinkWithoutUnderline>
       )
     })
 
