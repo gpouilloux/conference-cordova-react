@@ -2,10 +2,9 @@
   "name": "conference",
   "version": "1.0.0",
   "description": "A conference application about sessions and speakers",
-  "main": "index.jsx",
   "scripts": {
     "start": "node server",
-    "deploy": "./node_modules/.bin/webpack -d && cordova build android && cordova run android",
+    "deploy": "./node_modules/.bin/webpack -d www/ && cordova build android && cordova run android",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
