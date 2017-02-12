@@ -1,6 +1,8 @@
 import React from 'react'
+import renderHTML from 'react-render-html'
 
-import { Card, CardHeader, CardMedia, CardText, CardTitle } from 'material-ui/Card'
+import { Card, CardHeader, CardText, CardTitle } from 'material-ui/Card'
+import {GridList, GridTile} from 'material-ui/GridList'
 import { List, ListItem } from 'material-ui/List'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
@@ -47,10 +49,18 @@ const Speaker = React.createClass({
             title={`${this.props.speaker.firstname} ${this.props.speaker.lastname}`}
             subtitle='Subtitle TBD'
           />
-          <CardMedia>
-            <img src={`img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
-          </CardMedia>
           <CardText>
+            <GridList cellHeight={500}>
+              <GridTile
+                key='speaker.about'>
+                {renderHTML(`<div>${this.props.speaker.about}</div>`)}
+              </GridTile>
+              <GridTile
+                key='speaker.image'>
+                <img src={`img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
+              </GridTile>
+
+            </GridList>
           </CardText>
         </Card>
         <Card>
