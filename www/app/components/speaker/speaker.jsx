@@ -7,6 +7,7 @@ import { List, ListItem } from 'material-ui/List'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
+import SocialIcons from './socialIcons.jsx'
 
 /**
  * Component to view a speaker
@@ -52,6 +53,10 @@ const Speaker = React.createClass({
             <GridList cellHeight={500}>
               <GridTile key='speaker.about'>
                 {renderHTML(`<div>${this.props.speaker.about}</div>`)}
+                { this.props.speaker.socials ?
+                    <SocialIcons socialIcons={this.props.speaker.socials} />
+                    : undefined
+                }
               </GridTile>
               <GridTile key='speaker.image'>
                 <img src={`img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
