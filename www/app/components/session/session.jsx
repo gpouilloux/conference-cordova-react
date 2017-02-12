@@ -5,6 +5,7 @@ import { Card, CardTitle, CardText } from 'material-ui/Card'
 import { List, ListItem } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
 
+import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
 
 /**
@@ -25,13 +26,17 @@ const Session = React.createClass({
   },
 
   render() {
+    const rightArrow = <i className="fa fa-angle-right" aria-hidden="true" />
 
     const speakersWithPicture = this.props.session.speakersPlain ? this.props.session.speakersPlain.map(speaker => {
       return (
-        <ListItem key={speaker.id}
-          primaryText={`${speaker.firstname} ${speaker.lastname}`}
-          leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
-        />
+        <LinkWithoutUnderline key={speaker.id} to={`/speakers/${speaker.id}`}>
+          <ListItem key={speaker.id}
+            primaryText={`${speaker.firstname} ${speaker.lastname}`}
+            leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
+            rightIcon={rightArrow}
+          />
+        </LinkWithoutUnderline>
       )
     }) : undefined
 

@@ -47,19 +47,15 @@ const Speaker = React.createClass({
         <Card>
           <CardHeader
             title={`${this.props.speaker.firstname} ${this.props.speaker.lastname}`}
-            subtitle='Subtitle TBD'
           />
           <CardText>
             <GridList cellHeight={500}>
-              <GridTile
-                key='speaker.about'>
+              <GridTile key='speaker.about'>
                 {renderHTML(`<div>${this.props.speaker.about}</div>`)}
               </GridTile>
-              <GridTile
-                key='speaker.image'>
+              <GridTile key='speaker.image'>
                 <img src={`img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
               </GridTile>
-
             </GridList>
           </CardText>
         </Card>
