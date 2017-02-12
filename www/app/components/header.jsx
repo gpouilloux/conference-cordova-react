@@ -34,7 +34,7 @@ const Header = React.createClass({
         onLeftIconButtonTouchTap={this._toggleMenu}/>
       <Drawer open={this.state.isMenuOpen} onRequestChange={this._handleDrawerRequestChange}>
         <LinkWithoutUnderline to="/">
-          <MenuItem onTouchTap={this._closeMenu}>Conférence</MenuItem>
+          <MenuItem onTouchTap={this._closeMenu}>Conference</MenuItem>
         </LinkWithoutUnderline>
         <LinkWithoutUnderline to="/sessions">
           <MenuItem onTouchTap={this._closeMenu}>Sessions</MenuItem>

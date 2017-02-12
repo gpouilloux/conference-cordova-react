@@ -19,11 +19,11 @@ const Home = React.createClass({
 
     return (
       <div>
-        <Header pageTitle="Conférence" />
+        <Header pageTitle="Conference" />
         <div>
           <Card>
             <CardHeader
-              title="Conférence"
+              title="Conference"
               subtitle="09/02/2017 - 10/02/2017"
             />
             <CardMedia>
