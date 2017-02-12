@@ -4,6 +4,7 @@ import renderHTML from 'react-render-html'
 import { Card, CardTitle, CardText } from 'material-ui/Card'
 import { List, ListItem } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
@@ -54,6 +55,11 @@ const Session = React.createClass({
           <List>
             {speakersWithPicture}
           </List>
+          <div style={{textAlign: 'center'}}>
+            <LinkWithoutUnderline to={`/sessions/${this.props.session.id}/note`}>
+              <RaisedButton label="My notes" primary={true} />
+            </LinkWithoutUnderline>
+          </div>
         </Card>
       </div>
     )
