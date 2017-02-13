@@ -12,9 +12,6 @@ import Header from './header.jsx'
  */
 const Home = React.createClass({
 
-  propTypes: {
-  },
-
   render() {
 
     return (
@@ -27,7 +24,7 @@ const Home = React.createClass({
               subtitle="09/02/2017 - 10/02/2017"
             />
             <CardMedia>
-              <img src="img/imt_atlantique.jpg" alt="Logo IMT Atlantique"/>
+              <img src="data/img/imt_atlantique.jpg" alt="Logo IMT Atlantique"/>
             </CardMedia>
             <CardActions>
               <Link to="/sessions">

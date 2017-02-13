@@ -82,7 +82,7 @@ const Speaker = React.createClass({
                 }
               </GridTile>
               <GridTile key='speaker.image'>
-                <img src={`img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
+                <img src={`data/img/speakers/${this.props.speaker.image}`} alt={`Image ${this.props.speaker.id}`}/>
               </GridTile>
             </GridList>
           </CardText>

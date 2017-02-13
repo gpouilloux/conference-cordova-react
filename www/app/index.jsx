@@ -12,13 +12,13 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import configureStore from './store/configureStore.jsx'
-import HomeContainer from './containers/homeContainer.jsx'
+import Home from './components/home.jsx'
+import AboutPhone from './components/aboutPhone.jsx'
 import SessionsContainer from './containers/session/sessionsContainer.jsx'
 import SessionContainer from './containers/session/sessionContainer.jsx'
 import NoteContainer from './containers/session/noteContainer.jsx'
 import SpeakersContainer from './containers/speaker/speakersContainer.jsx'
 import SpeakerContainer from './containers/speaker/speakerContainer.jsx'
-import AboutPhoneContainer from './containers/aboutPhoneContainer.jsx'
 
 const App = React.createClass({
 
@@ -32,13 +32,13 @@ const App = React.createClass({
         <Provider store={store}>
           <Router history={history}>
             <Route path="/">
-              <IndexRoute component={HomeContainer} />
+              <IndexRoute component={Home} />
               <Route path="sessions" component={SessionsContainer} />
               <Route path="sessions/:id" component={SessionContainer} />
               <Route path="sessions/:id/note" component={NoteContainer} />
               <Route path="speakers" component={SpeakersContainer} />
               <Route path="speakers/:id" component={SpeakerContainer} />
-              <Route path="aboutPhone" component={AboutPhoneContainer} />
+              <Route path="aboutPhone" component={AboutPhone} />
             </Route>
           </Router>
         </Provider>

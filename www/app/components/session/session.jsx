@@ -34,7 +34,7 @@ const Session = React.createClass({
         <LinkWithoutUnderline key={speaker.id} to={`/speakers/${speaker.id}`}>
           <ListItem key={speaker.id}
             primaryText={`${speaker.firstname} ${speaker.lastname}`}
-            leftAvatar={<Avatar src={`img/speakers/${speaker.image}`} />}
+            leftAvatar={<Avatar src={`data/img/speakers/${speaker.image}`} />}
             rightIcon={rightArrow}
           />
         </LinkWithoutUnderline>
