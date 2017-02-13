@@ -17,9 +17,16 @@ const Note = React.createClass({
   getInitialState() {
     return {
       noteComment: this.props.note.comment,
-      openPhotoSnackbar: false,
+      openSuccessSaveSnackbar: false,
+      openFailSaveSnackbar: false,
+      openSuccessPhotoSnackbar: false,
+      openFailPhotoSnackbar: false,
+      openSuccessAudioSnackbar: false,
       openFailAudioSnackbar: false,
-      openFailVideoSnackbar: false
+      openSuccessVideoSnackbar: false,
+      openFailVideoSnackbar: false,
+      openSuccessDeleteImageSnackbar: false,
+      openFailDeleteImageSnackbar: false
     }
   },
 
@@ -40,9 +47,7 @@ const Note = React.createClass({
   },
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      noteComment: newProps.note.comment
-    })
+    this.setState({noteComment: newProps.note.comment})
   },
 
   render() {
@@ -105,26 +110,61 @@ const Note = React.createClass({
           open={this.state.openSuccessSaveSnackbar}
           message='Note saved successfully'
           autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openSuccessSaveSnackbar: false})}
         />
         <Snackbar
           open={this.state.openFailSaveSnackbar}
           message='Error while saving the note'
           autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openFailSaveSnackbar: false})}
         />
         <Snackbar
-          open={this.state.openPhotoSnackbar}
+          open={this.state.openSuccessPhotoSnackbar}
+          message='Photo added to the note'
+          autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openSuccessPhotoSnackbar: false})}
+        />
+        <Snackbar
+          open={this.state.openFailPhotoSnackbar}
           message='Error while adding the photo'
           autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openFailPhotoSnackbar: false})}
+        />
+        <Snackbar
+          open={this.state.openSuccessAudioSnackbar}
+          message='Audio added to the note'
+          autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openSuccessAudioSnackbar: false})}
         />
         <Snackbar
           open={this.state.openFailAudioSnackbar}
           message='Error while recording the audio'
           autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openFailAudioSnackbar: false})}
+        />
+        <Snackbar
+          open={this.state.openSuccessVideoSnackbar}
+          message='Video added to the note'
+          autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openSuccessVideoSnackbar: false})}
         />
         <Snackbar
           open={this.state.openFailVideoSnackbar}
           message='Error while recording the video'
           autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openFailVideoSnackbar: false})}
+        />
+        <Snackbar
+          open={this.state.openSuccessDeleteImageSnackbar}
+          message='Image deleted from the note'
+          autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openSuccessDeleteImageSnackbar: false})}
+        />
+        <Snackbar
+          open={this.state.openFailDeleteImageSnackbar}
+          message='Sorry, we were unable to delete the image'
+          autoHideDuration={snackbarAutoHideDuration}
+          onRequestClose={() => this.setState({openFailDeleteImageSnackbar: false})}
         />
       </div>
     )
@@ -134,37 +174,28 @@ const Note = React.createClass({
   // PRIVATE          //
   //////////////////////
 
-  _onSuccessSave() {
-    this.setState({
-      openSuccessSaveSnackbar: true
-    })
-  },
-
-  _onFailSave() {
-    this.setState({
-      openFailSaveSnackbar: true
-    })
-  },
-
   _saveNote() {
+    const onSuccessSave = () => this.setState({openSuccessSaveSnackbar: true})
+    const onFailSave = () => this.setState({openFailSaveSnackbar: true})
+
     this.props.saveNote(this.props.sessionId, this.state.noteComment,
-      this._onSuccessSave, this._onFailSave)
+      onSuccessSave.bind(this), onFailSave.bind(this))
   },
 
-  _noteCommentChanged(component, value) {
-    this.setState({
-      noteComment: value
-    })
+  _noteCommentChanged(_, value) {
+    this.setState({noteComment: value})
   },
 
   _onSuccessPicture(imageData) {
-    this.props.addPhotoToNote(this.props.sessionId, imageData)
+    const onSuccessSavePicture = () => this.setState({openSuccessPhotoSnackbar: true})
+    const onFailSavePicture = () => this._onFailPicture()
+
+    this.props.addPhotoToNote(this.props.sessionId, imageData,
+      onSuccessSavePicture.bind(this), onFailSavePicture.bind(this))
   },
 
   _onFailPicture() {
-    this.setState({
-      openPhotoSnackbar: true
-    })
+    this.setState({openFailPhotoSnackbar: true})
   },
 
   _takePicture() {
@@ -191,8 +222,12 @@ const Note = React.createClass({
   },
 
   _captureAudio() {
+    const onSuccessSaveAudio = () => this.setState({openSuccessAudioSnackbar: true})
+    const onFailSaveAudio = () => this.setState({openFailAudioSnackbar: true})
+
     const onSuccessCaptureAudio = mediaFiles => {
-      mediaFiles.forEach(mediaFile => this.props.addAudioToNote(this.props.sessionId, mediaFile.fullPath))
+      mediaFiles.forEach(mediaFile => this.props.addAudioToNote(this.props.sessionId,
+        mediaFile.fullPath, onSuccessSaveAudio.bind(this), onFailSaveAudio.bind(this)))
     }
     const onFailCaptureAudio = () => this.setState({openFailAudioSnackbar: true})
 
@@ -201,8 +236,12 @@ const Note = React.createClass({
   },
 
   _captureVideo() {
+    const onSuccessSaveVideo = () => this.setState({openSuccessVideoSnackbar: true})
+    const onFailSaveVideo = () => this.setState({openFailVideoSnackbar: true})
+
     const onSuccessCaptureVideo = mediaFiles => {
-      mediaFiles.forEach(mediaFile => this.props.addVideoToNote(this.props.sessionId, mediaFile.fullPath))
+      mediaFiles.forEach(mediaFile => this.props.addVideoToNote(this.props.sessionId,
+        mediaFile.fullPath, onSuccessSaveVideo.bind(this), onFailSaveVideo.bind(this)))
     }
     const onFailCaptureVideo = () => this.setState({openFailVideoSnackbar: true})
 
@@ -230,7 +269,10 @@ const Note = React.createClass({
 
     const callback = function(buttonIndex) {
       if (buttonIndex === 1) { // delete the image
-        this.props.deleteImageFromNote(this.props.note)
+        const onSuccessDeleteImage = () => this.setState({openSuccessDeleteImageSnackbar: true})
+        const onFailDeleteImage = () => this.setState({openFailDeleteImageSnackbar: true})
+
+        this.props.deleteImageFromNote(this.props.note, onSuccessDeleteImage, onFailDeleteImage)
       } else if (buttonIndex === 2) {
         window.plugins.socialsharing.share(null, null, `data:image/jpeg;base64,${this.props.note.image}`)
       }
