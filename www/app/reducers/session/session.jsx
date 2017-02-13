@@ -5,19 +5,19 @@ import {
   FETCH_SESSION
 } from '../../actions/session/session.jsx'
 
-function fetchSession(state,id) {
+function fetchSession(id) {
   const session = _.find(conferenceData.sessions, session => session.id === id)
   session.speakersPlain = session.speakers.map(speakerId => {
     return _.find(conferenceData.speakers, speaker => speaker.id === speakerId)
   })
-  return Object.assign({}, state, session)
+  return Object.assign({}, session)
 }
 
 const session = (state = {}, action) => {
   switch (action.type) {
 
   case FETCH_SESSION:
-    return fetchSession(state, action.id)
+    return fetchSession(action.id)
 
   default:
     return state
