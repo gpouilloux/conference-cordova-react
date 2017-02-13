@@ -30,7 +30,7 @@ const App = React.createClass({
     return (
       <MuiThemeProvider>
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
             <Route path="/">
               <IndexRoute component={Home} />
               <Route path="sessions" component={SessionsContainer} />
