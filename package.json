@@ -14,7 +14,10 @@
     "react",
     "redux"
   ],
-  "author": "Guillaume Pouilloux",
+  "author": { "name" : "Guillaume Pouilloux"
+            , "email" : "gui.pouilloux@gmail.com"
+            , "url" : "https://github.com/gpouilloux/"
+            },
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.22.1",
