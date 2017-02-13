@@ -29,14 +29,15 @@ const Note = React.createClass({
       <div>
         <Header pageTitle='My notes' hasReturnButton={true} />
         <Card>
-          <CardTitle title={this.props.note && this.props.note.session ? this.props.note.session.title : ''}/>
+          <CardTitle title={this.props.note.session ? this.props.note.session.title : ''}/>
           <CardText>
             <div style={{textAlign: 'center'}}>
               <RaisedButton label="Save" />
             </div>
             <div>
               <TextField
-                hintText={this.props.note ? this.props.note.comment : 'Take notes here'}
+                id='notes-text-field'
+                hintText={this.props.note.comment ? this.props.note.comment : 'Take notes here'}
                 multiLine={true}
                 rows={10}
               />

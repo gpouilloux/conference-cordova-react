@@ -1,25 +1,10 @@
-import _ from 'lodash'
-import conferenceData from '../../../data/devfest-2015.json'
-
 import {
-  FETCH_NOTE_FROM_SESSION,
+  RECEIVE_NOTE,
   SAVE_NOTE
 } from '../../actions/session/note.jsx'
 
-function fetchNoteFromSession(state, sessionId) {
-  console.log('fetch note')
-  const def = window.db.transaction((tx) => {
-    tx.executeSql(`SELECT * FROM Notes WHERE sessionId = '${sessionId}'`, [], function(tx, rs) {
-      console.log('Transaction OK')
-      // const note = rs.rows.item(0)
-      // note.session = _.find(conferenceData.sessions, session => session.id === sessionId)
-      // return note
-      return rs.rows.item(0)
-    }, (tx, error) => {
-      console.log(`Transaction ERROR: ${error.message}`)
-      return null
-    })
-  })
+function receiveNote(note) {
+  return Object.assign({}, note)
 }
 
 function saveNote(state, id) {
@@ -29,8 +14,8 @@ function saveNote(state, id) {
 const note = (state = {}, action) => {
   switch (action.type) {
 
-  case FETCH_NOTE_FROM_SESSION:
-    return fetchNoteFromSession(state, action.sessionId)
+  case RECEIVE_NOTE:
+    return receiveNote(action.note)
 
   case SAVE_NOTE:
     return saveNote(state, action.id)

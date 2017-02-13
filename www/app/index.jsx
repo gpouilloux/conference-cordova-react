@@ -63,7 +63,7 @@ function startApp() {
       comment text,
       sessionId text)`)
   }, (error => {
-    console.log(`Transaction ERROR: ${error.message}`)
+  console.log(`Transaction ERROR: ${error.message}`)
   }), () => {
     console.log('Populated database OK')
   })
