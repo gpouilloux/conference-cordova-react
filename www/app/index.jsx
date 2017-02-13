@@ -61,7 +61,8 @@ function startApp() {
     tx.executeSql(`CREATE TABLE IF NOT EXISTS Notes (
       id integer primary key,
       comment text,
-      sessionId text)`)
+      sessionId text,
+      image text)`)
   }, (error => {
   console.log(`Transaction ERROR: ${error.message}`)
   }), () => {
