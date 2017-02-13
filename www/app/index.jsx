@@ -62,9 +62,11 @@ function startApp() {
       id integer primary key,
       comment text,
       sessionId text,
-      image text)`)
+      image text,
+      audio text,
+      video text)`)
   }, (error => {
-  console.log(`Transaction ERROR: ${error.message}`)
+    console.log(`Transaction ERROR: ${error.message}`)
   }), () => {
     console.log('Populated database OK')
   })

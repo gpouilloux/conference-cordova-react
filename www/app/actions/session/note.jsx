@@ -109,6 +109,92 @@ export function addPhotoToNote(sessionId, image) {
   }
 }
 
+export function addAudioToNote(sessionId, audio) {
+  return dispatch => {
+    window.db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Notes WHERE sessionId = '${sessionId}'`, [], function(tx, rs) {
+        const existingNote = rs.rows.item(0)
+        // if note already exists
+        if (existingNote) {
+          tx.executeSql("UPDATE Notes SET audio = ? WHERE sessionId = ?", [audio, sessionId], function(tx, rs) {
+            dispatch(receiveNote(Object.assign({}, existingNote, {
+              audio
+            })))
+          }, (tx, error) => {
+            console.log('update KO')
+            console.log(error)
+            // FIXME dispatch saveNoteFailure(error)
+            // snackbar notif
+            // dispatch(receiveNote(null))
+          })
+        } else {
+          tx.executeSql("INSERT INTO Notes (audio, sessionId) VALUES (?, ?)", [audio, sessionId], function(tx, rs) {
+            console.log('insert OK - audio')
+            dispatch(receiveNote({
+              sessionId,
+              audio
+            }))
+          }, (tx, error) => {
+            console.log('insert KO - audio')
+            console.log(tx)
+            console.log(error)
+            // FIXME dispatch saveNoteFailure(error)
+            // snackbar notif
+            // dispatch(receiveNote(null))
+          })
+        }
+      }, (tx, error) => {
+        console.log('unable to fetch note - audio')
+        // FIXME dispatch receiveNoteFailure(error)
+        // dispatch(receiveNote(null))
+      })
+    })
+  }
+}
+
+export function addVideoToNote(sessionId, video) {
+  return dispatch => {
+    window.db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Notes WHERE sessionId = '${sessionId}'`, [], function(tx, rs) {
+        const existingNote = rs.rows.item(0)
+        // if note already exists
+        if (existingNote) {
+          tx.executeSql("UPDATE Notes SET video = ? WHERE sessionId = ?", [video, sessionId], function(tx, rs) {
+            dispatch(receiveNote(Object.assign({}, existingNote, {
+              video
+            })))
+          }, (tx, error) => {
+            console.log('update KO')
+            console.log(error)
+            // FIXME dispatch saveNoteFailure(error)
+            // snackbar notif
+            // dispatch(receiveNote(null))
+          })
+        } else {
+          tx.executeSql("INSERT INTO Notes (video, sessionId) VALUES (?, ?)", [video, sessionId], function(tx, rs) {
+            console.log('insert OK - video')
+            dispatch(receiveNote({
+              sessionId,
+              video
+            }))
+          }, (tx, error) => {
+            console.log('insert KO - video')
+            console.log(tx)
+            console.log(error)
+            // FIXME dispatch saveNoteFailure(error)
+            // snackbar notif
+            // dispatch(receiveNote(null))
+          })
+        }
+      }, (tx, error) => {
+        console.log('unable to fetch note - video')
+        // FIXME dispatch receiveNoteFailure(error)
+        // dispatch(receiveNote(null))
+      })
+    })
+  }
+}
+
 export function fetchNoteFromSession(sessionId) {
   return dispatch => {
     window.db.transaction((tx) => {

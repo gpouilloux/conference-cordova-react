@@ -17,7 +17,9 @@ const Note = React.createClass({
   getInitialState() {
     return {
       noteComment: this.props.note.comment,
-      openPhotoSnackbar: false
+      openPhotoSnackbar: false,
+      openFailAudioSnackbar: false,
+      openFailVideoSnackbar: false
     }
   },
 
@@ -26,7 +28,9 @@ const Note = React.createClass({
     sessionId: React.PropTypes.string.isRequired,
     fetchNoteFromSession: React.PropTypes.func.isRequired,
     saveNote: React.PropTypes.func.isRequired,
-    addPhotoToNote: React.PropTypes.func.isRequired
+    addPhotoToNote: React.PropTypes.func.isRequired,
+    addAudioToNote: React.PropTypes.func.isRequired,
+    addVideoToNote: React.PropTypes.func.isRequired
   },
 
   componentDidMount() {
@@ -59,6 +63,20 @@ const Note = React.createClass({
             <RaisedButton
               icon={<i className='fa fa-picture-o fa-2x' aria-hidden='true' style={buttonIconStyle}/>}
               onTouchTap={this._usePicture}
+            />
+            <RaisedButton
+              icon={
+                <i className='fa fa-microphone fa-2x' aria-hidden='true'
+                  style={Object.assign({}, buttonIconStyle, {color: this.props.note.audio ? 'black' : 'red'})}
+                />}
+              onTouchTap={this.props.note.audio ? this._playAudio : this._captureAudio}
+            />
+            <RaisedButton
+              icon={
+                <i className='fa fa-video-camera fa-2x' aria-hidden='true'
+                  style={Object.assign({}, buttonIconStyle, {color: this.props.note.video ? 'black' : 'red'})}
+                />}
+              onTouchTap={this.props.note.video ? this._playVideo : this._captureVideo}
             />
             <div>
               <RaisedButton label='Save' onTouchTap={this._saveNote}
@@ -95,6 +113,16 @@ const Note = React.createClass({
         <Snackbar
           open={this.state.openPhotoSnackbar}
           message='Error while adding the photo'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
+        <Snackbar
+          open={this.state.openFailAudioSnackbar}
+          message='Error while recording the audio'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
+        <Snackbar
+          open={this.state.openFailVideoSnackbar}
+          message='Error while recording the video'
           autoHideDuration={snackbarAutoHideDuration}
         />
       </div>
@@ -148,7 +176,6 @@ const Note = React.createClass({
       correctOrientation: true,
       encodingType: window.navigator.camera.EncodingType.JPEG
     }
-
     window.navigator.camera.getPicture(this._onSuccessPicture, this._onFailPicture, cameraOptions)
   },
 
@@ -159,10 +186,37 @@ const Note = React.createClass({
       mediaType: window.navigator.camera.MediaType.PICTURE,
       encodingType: window.navigator.camera.EncodingType.JPEG
     }
-
     window.navigator.camera.getPicture(this._onSuccessPicture, this._onFailPicture, cameraOptions)
-  }
+  },
 
+  _captureAudio() {
+    const onSuccessCaptureAudio = mediaFiles => {
+      mediaFiles.forEach(mediaFile => this.props.addAudioToNote(this.props.sessionId, mediaFile.fullPath))
+    }
+    const onFailCaptureAudio = () => this.setState({openFailAudioSnackbar: true})
+
+    const optionsCaptureAudio = {limit: 1}
+    window.navigator.device.capture.captureAudio(onSuccessCaptureAudio, onFailCaptureAudio, optionsCaptureAudio)
+  },
+
+  _captureVideo() {
+    const onSuccessCaptureVideo = mediaFiles => {
+      mediaFiles.forEach(mediaFile => this.props.addVideoToNote(this.props.sessionId, mediaFile.fullPath))
+    }
+    const onFailCaptureVideo = () => this.setState({openFailVideoSnackbar: true})
+
+    const optionsCaptureVideo = {limit: 1}
+    window.navigator.device.capture.captureVideo(onSuccessCaptureVideo, onFailCaptureVideo, optionsCaptureVideo)
+  },
+
+  _playAudio() {
+    window.plugins.streamingMedia.playAudio(this.props.note.audio)
+  },
+
+  _playVideo() {
+    console.log(this.props.note.video)
+    window.plugins.streamingMedia.playVideo(this.props.note.video)
+  }
 })
 
 export default Note
