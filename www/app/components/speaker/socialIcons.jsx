@@ -13,8 +13,9 @@ const SocialIcons = React.createClass({
   render() {
     const socialIcons = this.props.socialIcons.map(socialIcon => {
       return (
-        <a key={socialIcon.class} href={socialIcon.link} target='_blank' style={{color: 'black', margin: '10px'}}>
-          <i className={`fa ${this._socialNameToIcon[socialIcon.class]} aria-hidden='true' `} />
+        <a key={socialIcon.class} style={{color: 'black', margin: '10px'}}
+           onTouchTap={() => window.cordova.InAppBrowser.open(socialIcon.link)}>
+          <i className={`fa fa-2x ${this._socialNameToIcon[socialIcon.class]} aria-hidden='true' `} />
         </a>
       )
     })
