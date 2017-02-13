@@ -48,7 +48,7 @@ const Session = React.createClass({
         <Card>
           <CardTitle title={this.props.session.title}/>
           <CardText>
-            {renderHTML(`<div>${this.props.session.desc}</div>`)}
+            {renderHTML(`<div>${this.props.session.desc || ''}</div>`)}
           </CardText>
         </Card>
         <Card>

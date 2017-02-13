@@ -7,9 +7,11 @@ import {
 
 function fetchSession(id) {
   const session = _.find(conferenceData.sessions, session => session.id === id)
-  session.speakersPlain = session.speakers.map(speakerId => {
-    return _.find(conferenceData.speakers, speaker => speaker.id === speakerId)
-  })
+  if (session.speakers) {
+    session.speakersPlain = session.speakers.map(speakerId => {
+      return _.find(conferenceData.speakers, speaker => speaker.id === speakerId)
+    })
+  }
   return Object.assign({}, session)
 }
 
