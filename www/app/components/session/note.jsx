@@ -30,7 +30,8 @@ const Note = React.createClass({
     saveNote: React.PropTypes.func.isRequired,
     addPhotoToNote: React.PropTypes.func.isRequired,
     addAudioToNote: React.PropTypes.func.isRequired,
-    addVideoToNote: React.PropTypes.func.isRequired
+    addVideoToNote: React.PropTypes.func.isRequired,
+    deleteImageFromNote: React.PropTypes.func.isRequired
   },
 
   componentDidMount() {
@@ -94,7 +95,7 @@ const Note = React.createClass({
             </div>
             <div>
               {this.props.note.image ?
-                <Image src={`data:image/jpeg;base64,${this.props.note.image}`} />
+                <Image src={`data:image/jpeg;base64,${this.props.note.image}`} onTouchTap={this._handleImageTouched} />
                 : undefined
               }
             </div>
@@ -214,8 +215,27 @@ const Note = React.createClass({
   },
 
   _playVideo() {
-    console.log(this.props.note.video)
     window.plugins.streamingMedia.playVideo(this.props.note.video)
+  },
+
+  _handleImageTouched(e) {
+    e.preventDefault()
+    const actionSheetOptions = {
+      androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
+      title: 'What do you want with this image?',
+      buttonLabels: ['Delete', 'Share'],
+      androidEnableCancelButton : true,
+      addCancelButtonWithLabel: 'Cancel'
+    }
+
+    const callback = function(buttonIndex) {
+      if (buttonIndex === 1) { // delete the image
+        this.props.deleteImageFromNote(this.props.note)
+      } else if (buttonIndex === 2) {
+        window.plugins.socialsharing.share(null, null, `data:image/jpeg;base64,${this.props.note.image}`)
+      }
+    }
+    window.plugins.actionsheet.show(actionSheetOptions, callback.bind(this))
   }
 })
 

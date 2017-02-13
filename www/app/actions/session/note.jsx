@@ -195,6 +195,24 @@ export function addVideoToNote(sessionId, video) {
   }
 }
 
+export function deleteImageFromNote(note) {
+  return dispatch => {
+    window.db.transaction(tx => {
+      tx.executeSql("UPDATE Notes SET image = null WHERE id = ?", [note.id], function(tx, rs) {
+        dispatch(receiveNote(Object.assign({}, note, {
+          image: null
+        })))
+      }, (tx, error) => {
+        console.log('delete KO')
+        console.log(error)
+        // FIXME dispatch saveNoteFailure(error)
+        // snackbar notif
+        // dispatch(receiveNote(null))
+      })
+    })
+  }
+}
+
 export function fetchNoteFromSession(sessionId) {
   return dispatch => {
     window.db.transaction((tx) => {
