@@ -11,11 +11,52 @@ function receiveNote(note) {
   }
 }
 
-export function saveNote(id) {
-  return {
-    type: SAVE_NOTE,
-    id
-  }
+export function saveNote(sessionId, comment) {
+  window.db.transaction((tx) => {
+    tx.executeSql(`SELECT * FROM Notes WHERE sessionId = '${sessionId}'`, [], function(tx, rs) {
+      const existingNote = rs.rows.item(0)
+      // if note already exists
+      if (existingNote) {
+        tx.executeSql("UPDATE Notes SET comment = ? WHERE sessionId = ?", [comment, sessionId], function(tx, rs) {
+          // dispatch(receiveNote(Object.assign))
+          console.log('update OK')
+          const note = {
+            id: rs.insertId,
+            comment,
+            sessionId
+          }
+          // dispatch(receiveNote(note))
+        }, (tx, error) => {
+          console.log('update KO')
+          console.log(error)
+          // FIXME dispatch saveNoteFailure(error)
+          // snackbar notif
+          // dispatch(receiveNote(null))
+        })
+      } else {
+        tx.executeSql("INSERT INTO Notes (comment, sessionId) VALUES (?, ?)", [comment, sessionId], function(tx, rs) {
+          console.log('insert OK')
+          const note = {
+            id: rs.insertId,
+            comment,
+            sessionId
+          }
+          // dispatch(receiveNote(note))
+        }, (tx, error) => {
+          console.log('insert KO')
+          console.log(tx)
+          console.log(error)
+          // FIXME dispatch saveNoteFailure(error)
+          // snackbar notif
+          // dispatch(receiveNote(null))
+        })
+      }
+    }, (tx, error) => {
+      console.log('unable to fetch note')
+      // FIXME dispatch receiveNoteFailure(error)
+      // dispatch(receiveNote(null))
+    })
+  })
 }
 
 export function fetchNoteFromSession(sessionId) {

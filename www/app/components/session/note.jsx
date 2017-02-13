@@ -12,10 +12,17 @@ import Header from '../header.jsx'
  */
 const Note = React.createClass({
 
+  getInitialState() {
+    return {
+      noteComment: this.props.note.comment
+    }
+  },
+
   propTypes: {
     note: React.PropTypes.object,
     sessionId: React.PropTypes.string.isRequired,
-    fetchNoteFromSession: React.PropTypes.func.isRequired
+    fetchNoteFromSession: React.PropTypes.func.isRequired,
+    saveNote: React.PropTypes.func.isRequired
   },
 
   componentDidMount() {
@@ -23,8 +30,13 @@ const Note = React.createClass({
     this.props.fetchNoteFromSession(this.props.sessionId)
   },
 
-  render() {
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      noteComment: newProps.note.comment
+    })
+  },
 
+  render() {
     return (
       <div>
         <Header pageTitle='My notes' hasReturnButton={true} />
@@ -32,20 +44,36 @@ const Note = React.createClass({
           <CardTitle title={this.props.note.session ? this.props.note.session.title : ''}/>
           <CardText>
             <div style={{textAlign: 'center'}}>
-              <RaisedButton label="Save" />
+              <RaisedButton label='Save' onTouchTap={this._saveNote} />
             </div>
             <div>
               <TextField
                 id='notes-text-field'
-                hintText={this.props.note.comment ? this.props.note.comment : 'Take notes here'}
+                hintText='Take notes here'
                 multiLine={true}
                 rows={10}
+                value={this.state.noteComment}
+                onChange={this._noteCommentChanged}
               />
             </div>
           </CardText>
         </Card>
       </div>
     )
+  },
+
+  //////////////////////
+  // PRIVATE          //
+  //////////////////////
+
+  _saveNote() {
+    this.props.saveNote(this.props.sessionId, this.state.noteComment)
+  },
+
+  _noteCommentChanged(component, value) {
+    this.setState({
+      noteComment: value
+    })
   }
 
 })
