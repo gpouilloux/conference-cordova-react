@@ -22,7 +22,8 @@ const Speaker = React.createClass({
       openSuccessAddContactSnackbar: false,
       openFailAddContactSnackbar: false,
       openSuccessRemoveContactSnackbar: false,
-      openFailRemoveContactSnackbar: false
+      openFailRemoveContactSnackbar: false,
+      isContactToggled: false
     }
   },
 
@@ -36,6 +37,11 @@ const Speaker = React.createClass({
     // load the session
     this.props.fetchSpeaker(this.props.speakerId)
   },
+
+  componentWillReceiveProps(newProps) {
+    this._checkIfContactAlreadyExists(newProps.speaker.id)
+  },
+
 
   render() {
 
@@ -65,6 +71,7 @@ const Speaker = React.createClass({
             <Toggle style={{marginBottom: '10px'}}
               label='Add to my contacts'
               onToggle={this._handleContactToggle}
+              toggled={this.state.isContactToggled}
             />
             <GridList cellHeight={500}>
               <GridTile key='speaker.about'>
@@ -137,8 +144,8 @@ const Speaker = React.createClass({
           value: social.link
         }
       })
-      const onSuccessSave = () => this.setState({openSuccessAddContactSnackbar: true})
-      const onFailSave = () => this.setState({openFailAddContactSnackbar: true})
+      const onSuccessSave = () => this.setState({openSuccessAddContactSnackbar: true, isContactToggled: true})
+      const onFailSave = () => this.setState({openFailAddContactSnackbar: true, isContactToggled: false})
       window.navigator.contacts.create(contact).save(onSuccessSave, onFailSave)
     } else {
       const findOptions = {}
@@ -149,22 +156,33 @@ const Speaker = React.createClass({
         const contact = contacts[0]
         if (contact) {
           contact.remove()
-          this.setState({openSuccessRemoveContactSnackbar: true})
+          this.setState({openSuccessRemoveContactSnackbar: true, isContactToggled: false})
         } else {
-          this.setState({openFailRemoveContactSnackbar: true})
+          this.setState({openFailRemoveContactSnackbar: true, isContactToggled: true})
         }
       }
       const onFailFindContact = () => {
-        this.setState({openFailRemoveContactSnackbar: true})
+        this.setState({openFailRemoveContactSnackbar: true, isContactToggled: true})
       }
       window.navigator.contacts.find(findFields, onSuccessFindContact,
         onFailFindContact, findOptions)
     }
   },
 
-  _contactAlreadyExists() {
-    return false
-    // TODO
+  _checkIfContactAlreadyExists(speakerId) {
+    const findOptions = {}
+    findOptions.filter = speakerId
+    findOptions.desiredFields = [window.navigator.contacts.fieldType.id]
+    const findFields = [window.navigator.contacts.fieldType.nickname]
+    const onSuccessFindContact = contacts => {
+      const contact = contacts[0]
+      this.setState({isContactToggled: !!contact})
+    }
+    const onFailFindContact = () => {
+      this.setState({isContactToggled: false})
+    }
+    window.navigator.contacts.find(findFields, onSuccessFindContact,
+      onFailFindContact, findOptions)
   }
 
 })
