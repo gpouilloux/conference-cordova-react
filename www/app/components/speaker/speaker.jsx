@@ -4,6 +4,8 @@ import renderHTML from 'react-render-html'
 import { Card, CardHeader, CardText, CardTitle } from 'material-ui/Card'
 import {GridList, GridTile} from 'material-ui/GridList'
 import { List, ListItem } from 'material-ui/List'
+import Toggle from 'material-ui/Toggle'
+import Snackbar from 'material-ui/Snackbar'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
@@ -14,6 +16,15 @@ import SocialIcons from './socialIcons.jsx'
  * @author Guillaume Pouilloux <gui.pouilloux@gmail.com>
  */
 const Speaker = React.createClass({
+
+  getInitialState() {
+    return {
+      openSuccessAddContactSnackbar: false,
+      openFailAddContactSnackbar: false,
+      openSuccessRemoveContactSnackbar: false,
+      openFailRemoveContactSnackbar: false
+    }
+  },
 
   propTypes: {
     speaker: React.PropTypes.object.isRequired,
@@ -28,6 +39,7 @@ const Speaker = React.createClass({
 
   render() {
 
+    const snackbarAutoHideDuration = 4000
     const rightArrow = <i className="fa fa-angle-right" aria-hidden="true" />
 
     const sessions = this.props.speaker.sessions ? this.props.speaker.sessions.map(session => {
@@ -50,6 +62,10 @@ const Speaker = React.createClass({
             title={`${this.props.speaker.firstname} ${this.props.speaker.lastname}`}
           />
           <CardText>
+            <Toggle style={{marginBottom: '10px'}}
+              label='Add to my contacts'
+              onToggle={this._handleContactToggle}
+            />
             <GridList cellHeight={500}>
               <GridTile key='speaker.about'>
                 {renderHTML(`<div>${this.props.speaker.about}</div>`)}
@@ -72,8 +88,83 @@ const Speaker = React.createClass({
             </List>
           </CardText>
         </Card>
+        <Snackbar
+          open={this.state.openSuccessAddContactSnackbar}
+          message='Contact added in your device'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
+        <Snackbar
+          open={this.state.openFailAddContactSnackbar}
+          message='Sorry, we were unable to add this contact'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
+        <Snackbar
+          open={this.state.openSuccessRemoveContactSnackbar}
+          message='Contact removed from your device'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
+        <Snackbar
+          open={this.state.openFailRemoveContactSnackbar}
+          message='Sorry, we were unable to remove this contact'
+          autoHideDuration={snackbarAutoHideDuration}
+        />
       </div>
     )
+  },
+
+  //////////////////////
+  // PRIVATE          //
+  //////////////////////
+
+  _handleContactToggle(e, isToggled) {
+    if (isToggled) {
+      // add the contact
+      const contact = {
+        nickname: this.props.speaker.id,
+        displayName: `${this.props.speaker.firstname} ${this.props.speaker.lastname}`,
+        name: {
+          givenName: this.props.speaker.firstname,
+          familyName: this.props.speaker.lastname
+        },
+        note: this.props.speaker.about,
+        organizations: [{
+          name: this.props.speaker.company
+        }]
+      }
+      contact.urls = this.props.speaker.socials.map(social => {
+        return {
+          type: social.class,
+          value: social.link
+        }
+      })
+      const onSuccessSave = () => this.setState({openSuccessAddContactSnackbar: true})
+      const onFailSave = () => this.setState({openFailAddContactSnackbar: true})
+      window.navigator.contacts.create(contact).save(onSuccessSave, onFailSave)
+    } else {
+      const findOptions = {}
+      findOptions.filter = this.props.speaker.id
+      findOptions.desiredFields = [window.navigator.contacts.fieldType.id]
+      const findFields = [window.navigator.contacts.fieldType.nickname]
+      const onSuccessFindContact = contacts => {
+        const contact = contacts[0]
+        if (contact) {
+          contact.remove()
+          this.setState({openSuccessRemoveContactSnackbar: true})
+        } else {
+          this.setState({openFailRemoveContactSnackbar: true})
+        }
+      }
+      const onFailFindContact = () => {
+        this.setState({openFailRemoveContactSnackbar: true})
+      }
+      window.navigator.contacts.find(findFields, onSuccessFindContact,
+        onFailFindContact, findOptions)
+    }
+  },
+
+  _contactAlreadyExists() {
+    return false
+    // TODO
   }
 
 })
