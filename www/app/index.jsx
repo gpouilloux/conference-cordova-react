@@ -15,6 +15,7 @@ import configureStore from './store/configureStore.jsx'
 import HomeContainer from './containers/homeContainer.jsx'
 import SessionsContainer from './containers/session/sessionsContainer.jsx'
 import SessionContainer from './containers/session/sessionContainer.jsx'
+import NoteContainer from './containers/session/noteContainer.jsx'
 import SpeakersContainer from './containers/speaker/speakersContainer.jsx'
 import SpeakerContainer from './containers/speaker/speakerContainer.jsx'
 import AboutPhoneContainer from './containers/aboutPhoneContainer.jsx'
@@ -34,6 +35,7 @@ const App = React.createClass({
               <IndexRoute component={HomeContainer} />
               <Route path="sessions" component={SessionsContainer} />
               <Route path="sessions/:id" component={SessionContainer} />
+              <Route path="sessions/:id/note" component={NoteContainer} />
               <Route path="speakers" component={SpeakersContainer} />
               <Route path="speakers/:id" component={SpeakerContainer} />
               <Route path="aboutPhone" component={AboutPhoneContainer} />
@@ -45,8 +47,28 @@ const App = React.createClass({
   }
 })
 
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin()
+function startApp() {
+  // Needed for onTouchTap
+  // http://stackoverflow.com/a/34015469/988941
+  injectTapEventPlugin()
 
-render(<App/>, document.getElementById('app'))
+  window.db = window.sqlitePlugin.openDatabase({
+    name: 'conference.db',
+    location: 'default'
+  })
+
+  window.db.transaction((tx) => {
+    tx.executeSql(`CREATE TABLE IF NOT EXISTS Notes (
+      id integer primary key,
+      comment text,
+      sessionId text)`)
+  }, (error => {
+  console.log(`Transaction ERROR: ${error.message}`)
+  }), () => {
+    console.log('Populated database OK')
+  })
+
+  render(<App/>, document.getElementById('app'))
+}
+
+document.addEventListener('deviceready', startApp, false)
