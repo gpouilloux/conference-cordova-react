@@ -9,6 +9,8 @@ import {
 } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import {lightBlueA700} from 'material-ui/styles/colors'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import configureStore from './store/configureStore.jsx'
@@ -28,8 +30,17 @@ const App = React.createClass({
     const store = configureStore(hashHistory)
     const history = syncHistoryWithStore(hashHistory, store)
 
+    const muiTheme = getMuiTheme({
+      palette: {
+        primary1Color: lightBlueA700,
+      },
+      appBar: {
+        height: 60,
+      }
+    })
+
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <Provider store={store}>
           <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
             <Route path="/">

@@ -3,8 +3,9 @@ import renderHTML from 'react-render-html'
 import {Timeline, TimelineEvent} from 'react-event-timeline'
 import moment from 'moment'
 
-import FlatButton from 'material-ui/FlatButton'
+import Toggle from 'material-ui/Toggle'
 import Snackbar from 'material-ui/Snackbar'
+import {lightBlueA700} from 'material-ui/styles/colors'
 
 import Header from '../header.jsx'
 
@@ -19,7 +20,8 @@ const Schedule = React.createClass({
       openSuccessCreatedEvent: false,
       openFailCreatedEvent: false,
       openSuccessDeletedEvent: false,
-      openFailDeletedEvent: false
+      openFailDeletedEvent: false,
+      isAttendingToggle: false
     }
   },
 
@@ -37,8 +39,9 @@ const Schedule = React.createClass({
   render() {
     const snackbarAutoHideDuration = 4000
 
-    const sessionsComponent = this.props.sessions.map(session => {
-      session.isAttended = session.isAttended
+    const sessionsAttended = this.state.isAttendingToggle ?
+      this.props.sessions.filter(session => session.isAttended) : this.props.sessions
+    const sessionsComponent = sessionsAttended.map(session => {
       const iconCalendar = session.isAttended ? 'fa-calendar-check-o' : 'fa-calendar-o'
 
       return (
@@ -56,15 +59,35 @@ const Schedule = React.createClass({
       )
     })
 
+    const noAttendingEventMessage =
+      <div style={{backgroundColor: lightBlueA700, height: '100%', width: '100%', textAlign: 'center'}}>
+        <div style={{paddingTop: '30%', color: 'white'}}>
+          <img src='data/img/calendar.png' width='50%'/>
+          <h2>No events in your calendar</h2>
+          <p>The events you add are displayed here so it's easier for you to track them.</p>
+        </div>
+      </div>
+
+    const timelineOrMessage = (this.state.isAttendingToggle && !this.props.sessions.filter(session => session.isAttended).length) ?
+      noAttendingEventMessage :
+      <Timeline>
+        {sessionsComponent}
+      </Timeline>
+
     return (
       <div>
         <Header pageTitle='Schedule'
-          iconElementRight={<FlatButton label='Save' />}
-          onRightIconButtonTouchTap={this._onSaveSchedule}
+          iconElementRight={
+            <Toggle onToggle={this._onAttendingToggle}
+                    style={{marginTop: '14px', marginRight: '14px'}}
+                    thumbStyle={{backgroundColor: '#211f1f'}}
+                    trackStyle={{backgroundColor: '#ffffff'}}
+                    thumbSwitchedStyle={{backgroundColor: '#7bb1ea'}}
+                    trackSwitchedStyle={{backgroundColor: '#ffffff'}}
+            />
+          }
         />
-        <Timeline>
-          {sessionsComponent}
-        </Timeline>
+        {timelineOrMessage}
         <Snackbar
           open={this.state.openSuccessCreatedEvent}
           message='This event has been added to your calendar'
@@ -97,8 +120,8 @@ const Schedule = React.createClass({
   // PRIVATE          //
   //////////////////////
 
-  _onSaveSchedule() {
-    //console.log('TODO save')
+  _onAttendingToggle(e, isToggled) {
+    this.setState({isAttendingToggle: isToggled})
   },
 
   _onTouchEvent(session) {
