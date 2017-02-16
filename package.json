@@ -44,6 +44,7 @@
     "redux": "^3.6.0",
     "redux-history-transitions": "^2.2.0",
     "redux-logger": "^2.8.1",
+    "redux-thunk": "^2.2.0",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
