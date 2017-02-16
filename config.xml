@@ -24,6 +24,7 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="StatusBarBackgroundColor" value="#0091EA" />
     <feature name="SocialSharing">
         <param name="android-package" value="nl.xservices.plugins.SocialSharing" />
     </feature>
@@ -40,4 +41,5 @@
     <plugin name="cordova-plugin-calendar" spec="~4.5.5">
         <variable name="CALENDAR_USAGE_DESCRIPTION" value="This app uses your calendar" />
     </plugin>
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
 </widget>
