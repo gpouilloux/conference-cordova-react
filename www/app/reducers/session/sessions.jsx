@@ -3,7 +3,8 @@ import moment from 'moment'
 import conferenceData from '../../../data/devfest-2015.json'
 
 import {
-  FETCH_SESSIONS
+  FETCH_SESSIONS,
+  SET_ATTENDED_SESSION
 } from '../../actions/session/sessions.jsx'
 
 function fetchSessions() {
@@ -16,8 +17,21 @@ function fetchSessions() {
       time: {
         start: sessionStart,
         end: sessionEnd
-      }
+      },
+      isAttended: false
     })
+  })
+}
+
+function setAttendedSession(id, isAttended, state) {
+  return state.map(session => {
+    if (session.id === id) {
+      return Object.assign({}, session, {
+        isAttended
+      })
+    } else {
+      return session
+    }
   })
 }
 
@@ -26,6 +40,9 @@ const sessions = (state = [], action) => {
 
   case FETCH_SESSIONS:
     return fetchSessions()
+
+  case SET_ATTENDED_SESSION:
+    return setAttendedSession(action.id, action.isAttended, state)
 
   default:
     return state

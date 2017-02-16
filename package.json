@@ -19,9 +19,9 @@
     "email": "gui.pouilloux@gmail.com",
     "url": "https://github.com/gpouilloux/"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/gpouilloux/conference-cordova-react.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gpouilloux/conference-cordova-react.git"
   },
   "license": "ISC",
   "dependencies": {
@@ -43,6 +43,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-history-transitions": "^2.2.0",
+    "redux-logger": "^2.8.1",
     "webpack": "^2.2.1"
   },
   "devDependencies": {

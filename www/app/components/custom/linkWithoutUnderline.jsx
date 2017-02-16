@@ -9,7 +9,7 @@ const LinkWithoutUnderline = React.createClass({
 
   propTypes: {
     to: React.PropTypes.string.isRequired,
-    children: React.PropTypes.object
+    children: React.PropTypes.array
   },
 
   render() {
