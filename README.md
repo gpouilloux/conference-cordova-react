@@ -12,6 +12,9 @@ Build & Deploy: `npm run deploy`
 
 Download the video recorded on my Android phone [here](/docs/ConferenceApp.mp4)
 
+Functionalities about recording audio and video is not working in the demo because one application was already recording my screen :-)
+But, it does work in the app!
+
 ## DONE
 
 All functionalities have been implemented (PDFs 0-9 and optional too!)
