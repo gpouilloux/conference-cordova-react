@@ -17,6 +17,7 @@ import AboutPhone from './components/aboutPhone.jsx'
 import SessionsContainer from './containers/session/sessionsContainer.jsx'
 import SessionContainer from './containers/session/sessionContainer.jsx'
 import NoteContainer from './containers/session/noteContainer.jsx'
+import ScheduleContainer from './containers/session/scheduleContainer.jsx'
 import SpeakersContainer from './containers/speaker/speakersContainer.jsx'
 import SpeakerContainer from './containers/speaker/speakerContainer.jsx'
 
@@ -38,6 +39,7 @@ const App = React.createClass({
               <Route path="sessions/:id/note" component={NoteContainer} />
               <Route path="speakers" component={SpeakersContainer} />
               <Route path="speakers/:id" component={SpeakerContainer} />
+              <Route path="schedule" component={ScheduleContainer} />
               <Route path="aboutPhone" component={AboutPhone} />
             </Route>
           </Router>
