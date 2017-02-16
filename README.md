@@ -8,6 +8,10 @@ Prepare Android platform: `cordova platform add android`
 
 Build & Deploy: `npm run deploy`
 
+## Demo
+
+Download the video recorded on my Android phone [here](/docs/ConferenceApp.mp4)
+
 ## DONE
 
 All functionalities have been implemented (PDFs 0-9 and optional too!)
