@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {List, ListItem, makeSelectable} from 'material-ui/List'
+import Divider from 'material-ui/Divider'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
@@ -33,6 +34,7 @@ const Sessions = React.createClass({
             primaryText={session.title}
             rightIcon={rightArrow}
           />
+          <Divider />
         </LinkWithoutUnderline>
       )
     })

@@ -2,6 +2,7 @@ import React from 'react'
 
 import {List, ListItem, makeSelectable} from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
+import Divider from 'material-ui/Divider'
 
 import LinkWithoutUnderline from '../custom/linkWithoutUnderline.jsx'
 import Header from '../header.jsx'
@@ -36,6 +37,7 @@ const Speakers = React.createClass({
             leftAvatar={<Avatar src={`data/img/speakers/${speaker.image}`} />}
             rightIcon={rightArrow}
           />
+          <Divider />
       </LinkWithoutUnderline>
       )
     })
