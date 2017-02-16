@@ -6,6 +6,8 @@ import moment from 'moment'
 import Toggle from 'material-ui/Toggle'
 import Snackbar from 'material-ui/Snackbar'
 import {lightBlueA700} from 'material-ui/styles/colors'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 
 import Header from '../header.jsx'
 
@@ -21,7 +23,8 @@ const Schedule = React.createClass({
       openFailCreatedEvent: false,
       openSuccessDeletedEvent: false,
       openFailDeletedEvent: false,
-      isAttendingToggle: false
+      isAttendingToggle: false,
+      conflictingSession: false
     }
   },
 
@@ -33,7 +36,7 @@ const Schedule = React.createClass({
 
   componentDidMount() {
     this.props.fetchSessions()
-    this._listExistingEvents()
+    this._listExistingEvents(this._refreshSessionAttendedState)
   },
 
   render() {
@@ -74,6 +77,22 @@ const Schedule = React.createClass({
         {sessionsComponent}
       </Timeline>
 
+    const conflictModalActions = [
+      <FlatButton
+        label="Attend anyway !"
+        secondary={true}
+        onTouchTap={() => {
+          this._createEvent(this.state.conflictingSession)
+          this.setState({openConflictDialog: false})
+        }}
+      />,
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={() => this.setState({openConflictDialog: false})}
+      />
+    ]
+
     return (
       <div>
         <Header pageTitle='Schedule'
@@ -112,6 +131,15 @@ const Schedule = React.createClass({
           autoHideDuration={snackbarAutoHideDuration}
           onRequestClose={() => this.setState({openFailDeletedEvent: false})}
         />
+        <Dialog
+            title='Conflict'
+            actions={conflictModalActions}
+            modal={false}
+            open={this.state.openConflictDialog}
+            onRequestClose={() => this.setState({openConflictDialog: false})}
+          >
+            You selected an event happening at the same time as one you're attending
+          </Dialog>
       </div>
     )
   },
@@ -139,31 +167,56 @@ const Schedule = React.createClass({
 
     } else {
       // create the event
-      const onSuccessCreatedEvent = () => {
-        this.setState({openSuccessCreatedEvent: true})
-        this.props.setAttendedSession(session.id, true)
-      }
-      const onFailCreatedEvent = () => this.setState({openFailCreatedEvent: true})
+      this._listExistingEvents(events => {
+        const sessionStart = session.time.start
+        const sessionEnd = session.time.end
+        const overlappingEvents = events.filter(event => {
+          const sessionFromEvent = this.props.sessions.filter(session => session.title === event.title)[0]
+          if (sessionFromEvent) {
+            const otherSessionStart = sessionFromEvent.time.start
+            const otherSessionEnd = sessionFromEvent.time.end
+            return ((sessionStart.isSameOrAfter(otherSessionStart) && sessionStart.isBefore(otherSessionEnd)) ||
+            (sessionEnd.isAfter(otherSessionStart) && sessionEnd.isSameOrBefore(otherSessionEnd)))
+          } else {
+            return false
+          }
+        })
 
-      window.plugins.calendar.createEvent(session.title, session.confRoom,
-        session.desc, session.time.start.toDate(), session.time.end.toDate(),
-        onSuccessCreatedEvent, onFailCreatedEvent)
-    }
-  },
-
-  _listExistingEvents() {
-    const onSuccessListEvents = events => {
-      events.forEach(event => {
-        const sessionFromEvent = this.props.sessions.filter(session => session.title === event.title)[0]
-        if (sessionFromEvent) {
-          this.props.setAttendedSession(sessionFromEvent.id, true)
+        // conflicts detected
+        if (overlappingEvents && overlappingEvents.length) {
+          this.setState({conflictingSession: session, openConflictDialog: true})
+        } else {
+          this._createEvent(session)
         }
       })
     }
+  },
 
+  _createEvent(session) {
+    const onSuccessCreatedEvent = () => {
+      this.setState({openSuccessCreatedEvent: true})
+      this.props.setAttendedSession(session.id, true)
+    }
+    const onFailCreatedEvent = () => this.setState({openFailCreatedEvent: true})
+
+    window.plugins.calendar.createEvent(session.title, session.confRoom,
+      session.desc, session.time.start.toDate(), session.time.end.toDate(),
+      onSuccessCreatedEvent, onFailCreatedEvent)
+  },
+
+  _listExistingEvents(onSuccess) {
     const now = moment().hours(0).minutes(0).seconds(0).milliseconds(0)
     window.plugins.calendar.listEventsInRange(now.toDate(), now.add(1, 'days').toDate(),
-      onSuccessListEvents)
+        onSuccess)
+  },
+
+  _refreshSessionAttendedState(events) {
+    events.forEach(event => {
+      const sessionFromEvent = this.props.sessions.filter(session => session.title === event.title)[0]
+      if (sessionFromEvent) {
+        this.props.setAttendedSession(sessionFromEvent.id, true)
+      }
+    })
   }
 
 })
